@@ -1,9 +1,12 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, View } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+
+//map works starts here
+import MapView from 'react-native-maps';
 
 export default function HomeScreen() {
   return (
@@ -15,6 +18,11 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
+
+      <View style={styles.container}>
+      <MapView style={styles.map} />
+      </View>
+
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
@@ -70,5 +78,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  container: {
+    flex: 1,
+  },
+  map: {
+    width: '100%',
+    height: '100%',
   },
 });
