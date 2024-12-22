@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expo.flushbuddy"
+      "bundleIdentifier": "com.expo.flushbuddy",
+      "config": {
+        "googleMapsApiKey": "AIzaSyA-JCT44eTWzYgZ96bkVBYAhTQIqmyRKTw"
+      }
     },
     "android": {
       "adaptiveIcon": {

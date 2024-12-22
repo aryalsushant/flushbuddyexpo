@@ -5,8 +5,8 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-//map works starts here
-import MapView from 'react-native-maps';
+// Map work starts here
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function HomeScreen() {
   return (
@@ -17,10 +17,20 @@ export default function HomeScreen() {
           source={require('@/assets/images/partial-react-logo.png')}
           style={styles.reactLogo}
         />
-      }>
-
-      <View style={styles.container}>
-      <MapView style={styles.map} />
+      }
+    >
+      {/* Map container */}
+      <View style={styles.mapContainer}>
+        <MapView
+          provider={PROVIDER_GOOGLE} // Ensures Google Maps is used
+          style={styles.map}
+          initialRegion={{
+            latitude: 37.78825, // Example latitude
+            longitude: -122.4324, // Example longitude
+            latitudeDelta: 0.0922, // Zoom level for latitude
+            longitudeDelta: 0.0421, // Zoom level for longitude
+          }}
+        />
       </View>
 
       <ThemedView style={styles.titleContainer}>
@@ -36,7 +46,7 @@ export default function HomeScreen() {
             {Platform.select({
               ios: 'cmd + d',
               android: 'cmd + m',
-              web: 'F12'
+              web: 'F12',
             })}
           </ThemedText>{' '}
           to open developer tools.
@@ -79,11 +89,11 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
   },
-  container: {
-    flex: 1,
+  mapContainer: {
+    height: 400, // Adjust the height of the map container as needed
+    width: '100%',
   },
   map: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
 });
