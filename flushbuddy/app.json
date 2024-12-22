@@ -10,10 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expo.flushbuddy",
-      "config": {
-        "googleMapsApiKey": "AIzaSyA-JCT44eTWzYgZ96bkVBYAhTQIqmyRKTw"
-      }
+      "bundleIdentifier": "com.expo.flushbuddy"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,21 +22,6 @@
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
     }
   }
 }
