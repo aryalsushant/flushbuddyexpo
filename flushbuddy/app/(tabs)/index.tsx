@@ -4,7 +4,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-// Import MapView without PROVIDER_GOOGLE
+// using default ios map instead of google maps
 import MapView from 'react-native-maps';
 
 export default function HomeScreen() {
