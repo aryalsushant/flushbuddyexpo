@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     marginTop: 48,
   },
   mapContainer: {
-    height: 400,
+    height: 475,
     width: '100%',
   },
   map: {
