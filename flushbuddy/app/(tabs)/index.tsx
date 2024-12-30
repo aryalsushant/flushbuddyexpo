@@ -17,15 +17,15 @@ export default function HomeScreen() {
 
       {/* Map container */}
       <View style={styles.mapContainer}>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
+      <MapView
+      style={styles.map}
+      initialRegion={{
+      latitude: 31.3271,
+      longitude: -89.3349,
+      latitudeDelta: 0.01, // Reduced to zoom in closer to campus
+      longitudeDelta: 0.01, // Reduced to zoom in closer to campus
+  }}
+/>
       </View>
     </ParallaxScrollView>
   );
