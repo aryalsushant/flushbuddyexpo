@@ -7,6 +7,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import * as Location from 'expo-location';
 
+//might have to use alternative of apple maps since it doesn't allow
+//directions embedding
+
 const RESTROOM_LOCATIONS = [
   {
     id: '1',
