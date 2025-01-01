@@ -2,9 +2,10 @@ import { StyleSheet, View, Pressable } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import MapView, { Marker, MarkerPressEvent } from 'react-native-maps';
-import { useState } from 'react';
+import MapView, { Marker } from 'react-native-maps';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
+import * as Location from 'expo-location';
 
 const RESTROOM_LOCATIONS = [
   {
@@ -48,14 +49,49 @@ type RestroomLocation = {
 
 export default function HomeScreen() {
   const [selectedLocation, setSelectedLocation] = useState<RestroomLocation | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        setCurrentLocation(location);
+      } catch (error) {
+        setErrorMsg('Error getting location');
+      }
+    })();
+  }, []);
 
   const handleMarkerPress = (location: RestroomLocation) => {
     setSelectedLocation(location);
   };
 
-  const handleDirections = () => {
-    router.push('/explore');
+  const handleDirections = async () => {
+    if (!currentLocation) {
+      setErrorMsg('Waiting for current location...');
+      return;
+    }
+
+    if (selectedLocation) {
+      router.push({
+        pathname: '/explore',
+        params: {
+          destLat: selectedLocation.coordinate.latitude,
+          destLng: selectedLocation.coordinate.longitude,
+          title: selectedLocation.title,
+          sourceLat: currentLocation.coords.latitude,
+          sourceLng: currentLocation.coords.longitude
+        }
+      });
+    }
   };
 
   return (
@@ -67,6 +103,13 @@ export default function HomeScreen() {
         <ThemedText type="title">Flushbuddy</ThemedText>
       </ThemedView>
 
+      {/* Error message display */}
+      {errorMsg && (
+        <ThemedView style={styles.errorContainer}>
+          <ThemedText style={styles.errorText}>{errorMsg}</ThemedText>
+        </ThemedView>
+      )}
+
       {/* Map container */}
       <View style={styles.mapContainer}>
         <MapView
@@ -77,6 +120,8 @@ export default function HomeScreen() {
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
           }}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
         >
           {RESTROOM_LOCATIONS.map((location) => (
             <Marker
@@ -86,6 +131,7 @@ export default function HomeScreen() {
               title={location.title}
               onPress={() => handleMarkerPress(location)}
               tracksViewChanges={false}
+              pinColor={selectedLocation?.id === location.id ? 'blue' : 'red'}
             />
           ))}
         </MapView>
@@ -102,10 +148,16 @@ export default function HomeScreen() {
               Rating: {selectedLocation.rating} / 5
             </ThemedText>
             <Pressable
-              style={styles.directionsButton}
+              style={[
+                styles.directionsButton,
+                !currentLocation && styles.directionsButtonDisabled
+              ]}
               onPress={handleDirections}
+              disabled={!currentLocation}
             >
-              <ThemedText style={styles.buttonText}>Directions</ThemedText>
+              <ThemedText style={styles.buttonText}>
+                {currentLocation ? 'Get Directions' : 'Getting Location...'}
+              </ThemedText>
             </Pressable>
           </>
         ) : (
@@ -164,8 +216,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  directionsButtonDisabled: {
+    backgroundColor: '#999999',
+  },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  errorContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    padding: 10,
+    backgroundColor: 'rgba(255, 0, 0, 0.7)',
+    borderRadius: 5,
+  },
+  errorText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
